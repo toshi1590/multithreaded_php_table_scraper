@@ -21,7 +21,7 @@ function delete_ajax_inputs () {
 }
 
 
-// column_numbers_to_scrape_section
+// section_for_column_numbers_to_scrape
 const add_btn_for_column_numbers_to_scrape = document.getElementById('add_btn_for_column_numbers_to_scrape');
 const table_for_column_numbers_to_scrape = document.getElementById('table_for_column_numbers_to_scrape');
 
@@ -36,7 +36,7 @@ add_btn_for_column_numbers_to_scrape.onclick = function () {
 }
 
 
-// column_numbers_to_click_section
+// section_for_column_numbers_to_click
 const column_numbers_to_click_section = document.getElementById('column_numbers_to_click_section');
 const column_numbers_to_click_label = document.getElementById('column_numbers_to_click_label');
 
@@ -100,7 +100,6 @@ function create_column_numbers_to_click_table(add_btn) {
   add_btn.remove();
 }
 
-
 // pagination_section
 const title_of_pagination_section = document.getElementById('title_of_pagination_section');
 const pagination_inputs = document.getElementById('pagination_inputs');
@@ -129,7 +128,6 @@ function delete_pagination_inputs () {
   title_of_pagination_section.appendChild(use_btn);
 }
 
-
 // start_scraping_btn
 const scraping_form = document.getElementById('scraping_form');
 let scraped_data;
@@ -155,7 +153,7 @@ $(function() {
       $('#chart_section').html('');
 
       $.ajax({
-        url: 'http://localhost:81/csr/scraping.php',
+        url: 'http://localhost:81/scraping.php',
         type: 'POST',
         data: $('#scraping_form').serialize(),
         // Until request is completed
@@ -187,7 +185,6 @@ $(function() {
     }
   });
 });
-
 
 // result_table_section
 const result_table_section = document.getElementById('result_table_section');
@@ -244,7 +241,6 @@ function display_result_table (scraped_data) {
   }
 }
 
-
 //chart
 const chart_form = document.getElementById('chart_form');
 const chart_section = document.getElementById('chart_section');
@@ -293,7 +289,6 @@ function display_chart_form () {
   chart_form.appendChild(see_chart_btn);
 }
 
-
 // title select
 function append_titles(section) {
  const select = document.createElement('select');
@@ -311,65 +306,49 @@ function append_titles(section) {
  section.appendChild(select);
 }
 
-
-//
 function append_titles_in_group_by_a_column_section () {
- //
- range_section.innerHTML = '';
- keyword_section.innerHTML = '';
+  range_section.innerHTML = '';
+  keyword_section.innerHTML = '';
 
- //
- append_titles(group_by_a_column_section);
+  append_titles(group_by_a_column_section);
 }
 
-
-//
 function append_titles_in_range_section () {
- //
- group_by_a_column_section.innerHTML = '';
- keyword_section.innerHTML = '';
+  group_by_a_column_section.innerHTML = '';
+  keyword_section.innerHTML = '';
 
- //
- append_titles(range_section);
+  append_titles(range_section);
 
- //
- const add_btn = get_btn('add', 'btn btn-primary mb-1', 'range_add_btn', 'add_range()');
- range_section.appendChild(add_btn);
+  const add_btn = get_btn('add', 'btn btn-primary mb-1', 'range_add_btn', 'add_range()');
+  range_section.appendChild(add_btn);
 
- //
- const min = get_input('number', 'form-control', 'mins[]', 'min');
- const max = get_input('number', 'form-control', 'maxs[]', 'max');
- const delete_btn = get_btn('delete', 'btn btn-danger', '', 'delete_tr(this)');
- const table = get_table();
- range_section.appendChild(table);
- table.querySelector('tbody').setAttribute('id', 'tbody_of_range_table');
- const elements_for_tds = [min, max, delete_btn];
- add_tr_in_tbody(elements_for_tds, tbody_of_range_table);
+  const min = get_input('number', 'form-control', 'mins[]', 'min');
+  const max = get_input('number', 'form-control', 'maxs[]', 'max');
+  const delete_btn = get_btn('delete', 'btn btn-danger', '', 'delete_tr(this)');
+  const table = get_table();
+  range_section.appendChild(table);
+  table.querySelector('tbody').setAttribute('id', 'tbody_of_range_table');
+  const elements_for_tds = [min, max, delete_btn];
+  add_tr_in_tbody(elements_for_tds, tbody_of_range_table);
 }
 
 function add_range () {
- const min = get_input('number', 'form-control', 'mins[]', 'min');
- const max = get_input('number', 'form-control', 'maxs[]', 'max');
- const delete_btn = get_btn('delete', 'btn btn-danger', '', 'delete_tr(this)');
- const elements_for_tds = [min, max, delete_btn];
- add_tr_in_tbody(elements_for_tds, tbody_of_range_table);
+  const min = get_input('number', 'form-control', 'mins[]', 'min');
+  const max = get_input('number', 'form-control', 'maxs[]', 'max');
+  const delete_btn = get_btn('delete', 'btn btn-danger', '', 'delete_tr(this)');
+  const elements_for_tds = [min, max, delete_btn];
+  add_tr_in_tbody(elements_for_tds, tbody_of_range_table);
 }
 
-
-//
 function append_titles_in_keyword_section () {
-  //
   group_by_a_column_section.innerHTML = '';
   range_section.innerHTML = '';
 
-  //
   append_titles(keyword_section);
 
-  //
   const add_btn = get_btn('add', 'btn btn-primary mb-1', 'keyword_add_btn', 'add_keyword_input()');
   keyword_section.appendChild(add_btn);
 
-  //
   const keyword_input = get_input('text', 'form-control', 'keywords[]', 'keyword');
   const delete_btn = get_btn('delete', 'btn btn-danger', '', 'delete_tr(this)');
   const table = get_table();
@@ -387,207 +366,195 @@ function add_keyword_input () {
   add_tr_in_tbody(elements_for_tds, tbody_of_keyword_table);
 }
 
-
-//
 function judge () {
- const title_number = parseInt(document.querySelector('select[name="title_number"]').value);
+  const title_number = parseInt(document.querySelector('select[name="title_number"]').value);
 
- if (group_by_a_column_radio.checked) {
-   const data_for_title_number = [];
-   let total = 0;
+  if (group_by_a_column_radio.checked) {
+    const data_for_title_number = [];
+    let total = 0;
 
-   for (let i = 1; i < scraped_data.length; i++) {
-     data_for_title_number.push(scraped_data[i][title_number]);
-     total++;
-   }
+    for (let i = 1; i < scraped_data.length; i++) {
+      data_for_title_number.push(scraped_data[i][title_number]);
+      total++;
+    }
 
-   // get distinct data
-   let counted_data = {};
+    // get distinct data
+    let counted_data = {};
 
-   for (let i = 0; i < data_for_title_number.length; i++) {
-     var key = data_for_title_number[i];
+    for (let i = 0; i < data_for_title_number.length; i++) {
+      var key = data_for_title_number[i];
 
-     if (counted_data[key] == undefined) {
-       counted_data[key] = 0;
-     }
+      if (counted_data[key] == undefined) {
+        counted_data[key] = 0;
+      }
 
-     counted_data[key]++;
-   }
+      counted_data[key]++;
+    }
 
-   //
-   var array = Object.keys(counted_data).map((k)=>({ key: k, value: counted_data[k] }));
+    var array = Object.keys(counted_data).map((k)=>({ key: k, value: counted_data[k] }));
 
-   array.sort((a, b) => b.value - a.value);
+    array.sort((a, b) => b.value - a.value);
 
-   counted_data = Object.assign({}, ...array.map((item) => ({
-     [item.key]: item.value,
-   })));
+    counted_data = Object.assign({}, ...array.map((item) => ({
+      [item.key]: item.value,
+    })));
 
-   // get labels from counted_data
-   let labels = [];
+    // get labels from counted_data
+    let labels = [];
 
-   for (key in counted_data){
-     const percentage = Math.round(((counted_data[key] / total) * 100) * 10) / 10;
-     labels.push(key + " (" + percentage + "%)");
-   }
+    for (key in counted_data){
+      const percentage = Math.round(((counted_data[key] / total) * 100) * 10) / 10;
+      labels.push(key + " (" + percentage + "%)");
+    }
 
-   // get values from counted_data
-   let values = [];
+    // get values from counted_data
+    let values = [];
 
-   for (key in counted_data){
-     values.push(counted_data[key]);
-   }
+    for (key in counted_data){
+      values.push(counted_data[key]);
+    }
 
-   display_chart(labels, values, title_number, total)
- } else if (range_radio.checked) {
-   const mins = document.getElementsByName('mins[]');
-   const maxs = document.getElementsByName('maxs[]');
+    display_chart(labels, values, title_number, total)
+  } else if (range_radio.checked) {
+    const mins = document.getElementsByName('mins[]');
+    const maxs = document.getElementsByName('maxs[]');
 
-   if (mins.length != 0 && maxs.length != 0) {
-     let empty_check_flag;
+    if (mins.length != 0 && maxs.length != 0) {
+      let empty_check_flag;
 
-     for (let i = 0; i < mins.length; i++) {
-       if (mins[i].value == '' || maxs[i].value == '') {
-         alert('fill in blanks');
-         empty_check_flag = false;
-         break;
-       }
+      for (let i = 0; i < mins.length; i++) {
+        if (mins[i].value == '' || maxs[i].value == '') {
+          alert('fill in blanks');
+          empty_check_flag = false;
+          break;
+        }
 
-       empty_check_flag = true
-     }
+        empty_check_flag = true
+      }
 
-     if (empty_check_flag == true) {
-       //
-       let ranges = [];
-       let range_groups = [];
+      if (empty_check_flag == true) {
+        let ranges = [];
+        let range_groups = [];
 
-       for (let i = 0; i < mins.length; i++) {
-         ranges.push(mins[i].value + ' - ' + maxs[i].value);
-         range_groups.push(new Array());
-       }
+        for (let i = 0; i < mins.length; i++) {
+          ranges.push(mins[i].value + ' - ' + maxs[i].value);
+          range_groups.push(new Array());
+        }
 
-       //
-       let unsorted_data = [];
-       let total = 0;
+        let unsorted_data = [];
+        let total = 0;
 
-       for (let i = 1; i < scraped_data.length; i++) {
-         unsorted_data.push(scraped_data[i]);
-         total++;
-       }
+        for (let i = 1; i < scraped_data.length; i++) {
+          unsorted_data.push(scraped_data[i]);
+          total++;
+        }
 
-       //
-       for (let i = 0; i < range_groups.length; i++) {
-         for (let j = 0; j < unsorted_data.length; j++) {
-           if (unsorted_data[j][title_number].match(/[0-9]+,[0-9]+/) != null) {
-             if (unsorted_data[j][title_number].replace(/,/g, '') >= parseFloat(mins[i].value) && unsorted_data[j][title_number].replace(/,/g, '') <= parseFloat(maxs[i].value)) {
-               range_groups[i].push(unsorted_data[j]);
-               unsorted_data.splice(j, 1);
-               j--;
-             }
-           } else {
-             if (unsorted_data[j][title_number] >= parseFloat(mins[i].value) && unsorted_data[j][title_number] <= parseFloat(maxs[i].value)) {
-               range_groups[i].push(unsorted_data[j]);
-               unsorted_data.splice(j, 1);
-               j--;
-             }
-           }
-         }
-       }
+        for (let i = 0; i < range_groups.length; i++) {
+          for (let j = 0; j < unsorted_data.length; j++) {
+            if (unsorted_data[j][title_number].match(/[0-9]+,[0-9]+/) != null) {
+              if (unsorted_data[j][title_number].replace(/,/g, '') >= parseFloat(mins[i].value) && unsorted_data[j][title_number].replace(/,/g, '') <= parseFloat(maxs[i].value)) {
+                range_groups[i].push(unsorted_data[j]);
+                unsorted_data.splice(j, 1);
+                j--;
+              }
+            } else {
+              if (unsorted_data[j][title_number] >= parseFloat(mins[i].value) && unsorted_data[j][title_number] <= parseFloat(maxs[i].value)) {
+                range_groups[i].push(unsorted_data[j]);
+                unsorted_data.splice(j, 1);
+                j--;
+              }
+            }
+          }
+        }
 
-       if (unsorted_data.length != 0) {
-         ranges.push('the other');
-         range_groups.push(unsorted_data);
-       }
+        if (unsorted_data.length != 0) {
+          ranges.push('the other');
+          range_groups.push(unsorted_data);
+        }
 
-       let labels = ranges;
+        let labels = ranges;
 
-       for (let i = 0; i < range_groups.length; i++) {
-         const percentage = Math.round(((range_groups[i].length / total) * 100) * 10) / 10;
-         labels[i] = labels[i].concat(" (" + percentage + "%)");
-       }
+        for (let i = 0; i < range_groups.length; i++) {
+          const percentage = Math.round(((range_groups[i].length / total) * 100) * 10) / 10;
+          labels[i] = labels[i].concat(" (" + percentage + "%)");
+        }
 
-       let values = [];
+        let values = [];
 
-       range_groups.forEach(function(element){
-         values.push(element.length);
-       })
+        range_groups.forEach(function(element){
+          values.push(element.length);
+        })
 
-       display_chart(labels, values, title_number, total);
-     }
-   }
- } else if (keyword_radio.checked) {
-   const keyword_inputs = document.getElementsByName('keywords[]');
+        display_chart(labels, values, title_number, total);
+      }
+    }
+  } else if (keyword_radio.checked) {
+    const keyword_inputs = document.getElementsByName('keywords[]');
 
-   if (keyword_inputs.length != 0) {
-     let empty_check_flag;
+    if (keyword_inputs.length != 0) {
+      let empty_check_flag;
 
-     for (let i = 0; i < keyword_inputs.length; i++) {
-       if (keyword_inputs[i].value == '') {
-         alert('fill in blanks');
-         empty_check_flag = false;
-         break;
-       }
+      for (let i = 0; i < keyword_inputs.length; i++) {
+        if (keyword_inputs[i].value == '') {
+          alert('fill in blanks');
+          empty_check_flag = false;
+          break;
+        }
 
-       empty_check_flag = true
-     }
+        empty_check_flag = true
+      }
 
-     if (empty_check_flag == true) {
-       //
-       let keywords = [];
-       let keyword_groups = [];
+      if (empty_check_flag == true) {
+        let keywords = [];
+        let keyword_groups = [];
 
-       for (let i = 0; i < keyword_inputs.length; i++) {
-         keywords.push(keyword_inputs[i].value);
-         keyword_groups.push(new Array());
-       }
+        for (let i = 0; i < keyword_inputs.length; i++) {
+          keywords.push(keyword_inputs[i].value);
+          keyword_groups.push(new Array());
+        }
 
-       //
-       let unsorted_data = [];
-       let total = 0;
+        let unsorted_data = [];
+        let total = 0;
 
-       for (let i = 1; i < scraped_data.length; i++) {
-         unsorted_data.push(scraped_data[i]);
-         total++;
-       }
+        for (let i = 1; i < scraped_data.length; i++) {
+          unsorted_data.push(scraped_data[i]);
+          total++;
+        }
 
-       //
-       for (let i = 0; i < keyword_groups.length; i++) {
-         for (let j = 0; j < unsorted_data.length; j++) {
-           if (unsorted_data[j][title_number].includes(keywords[i])) {
-             keyword_groups[i].push(unsorted_data[j]);
-             unsorted_data.splice(j, 1);
-             j--;
-           }
-         }
-       }
+        for (let i = 0; i < keyword_groups.length; i++) {
+          for (let j = 0; j < unsorted_data.length; j++) {
+            if (unsorted_data[j][title_number].includes(keywords[i])) {
+              keyword_groups[i].push(unsorted_data[j]);
+              unsorted_data.splice(j, 1);
+              j--;
+            }
+          }
+        }
 
-       if (unsorted_data.length != 0) {
-         keywords.push('the other');
-         keyword_groups.push(unsorted_data);
-       }
+        if (unsorted_data.length != 0) {
+          keywords.push('the other');
+          keyword_groups.push(unsorted_data);
+        }
 
-       //
-       let labels = keywords;
+        let labels = keywords;
 
-       for (let i = 0; i < keyword_groups.length; i++) {
-         const percentage = Math.round(((keyword_groups[i].length / total) * 100) * 10) / 10;
-         labels[i] = labels[i].concat(" (" + percentage + "%)");
-       }
+        for (let i = 0; i < keyword_groups.length; i++) {
+          const percentage = Math.round(((keyword_groups[i].length / total) * 100) * 10) / 10;
+          labels[i] = labels[i].concat(" (" + percentage + "%)");
+        }
 
-       let values = [];
+        let values = [];
 
-       keyword_groups.forEach(function(element){
-         values.push(element.length);
-       })
+        keyword_groups.forEach(function(element){
+          values.push(element.length);
+        })
 
-       display_chart(labels, values, title_number, total);
-     }
-   }
- }
+        display_chart(labels, values, title_number, total);
+      }
+    }
+  }
 }
 
-
-//
 function display_chart(labels, values, title_number, total) {
  chart_section.innerHTML = '';
 

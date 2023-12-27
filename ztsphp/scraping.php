@@ -11,6 +11,7 @@ use Facebook\WebDriver\Exception\StaleElementReferenceException;
 use Facebook\WebDriver\Exception\WebDriverCurlException;
 
 $data = [];
+
 $url = $_POST['url'];
 
 if (!empty($_POST['xpath_of_ajax_btn'])) {
@@ -20,6 +21,7 @@ if (!empty($_POST['xpath_of_ajax_btn'])) {
 }
 
 $column_numbers_to_scrape = $_POST['column_numbers_to_scrape'];
+
 $titles = $_POST['titles'];
 
 if (!empty($_POST['xpath_of_a'])) {
@@ -38,6 +40,8 @@ $rows = $_POST['rows'];
 
 if (!empty($_POST['text_of_next_btn'])) {
   $text_of_next_btn = $_POST['text_of_next_btn'];
+} else {
+  $text_of_next_btn = null;
 }
 
 if (!empty($_POST['pages'])) {
@@ -46,44 +50,36 @@ if (!empty($_POST['pages'])) {
   $pages = 1;
 }
 
-//
-$shou = floor(($pages / 5));
-$amari = ($pages % 5);
+$quotient = floor(($pages / 5));
+$remainder = ($pages % 5);
 $page_moving_times_in_5_threads = [];
 
 for ($i = 1; $i <= 5; $i++) {
-  if ($amari >= $i) {
-    array_push($page_moving_times_in_5_threads, $shou);
+  if ($remainder >= $i) {
+    array_push($page_moving_times_in_5_threads, $quotient);
   } else {
-    array_push($page_moving_times_in_5_threads, ($shou - 1));
+    array_push($page_moving_times_in_5_threads, ($quotient - 1));
   }
 }
-//
 
-array_push($data,$_POST['titles']);
+array_push($data, $_POST['titles']);
 
 for ($i = 1; $i <= $pages; $i++) {
   ${'runtime'.$i} = new \parallel\Runtime();
 }
 
 
-
-
 $future1 = $runtime1->run(function($url, $xpath_of_ajax_btn, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times){
   require_once 'vendor/autoload.php';
 
   $host = 'http://selenium-hub:4444/wd/hub';
-  $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome());
+  $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome(), 3600000, 3600000);
   $driver->get($url);
 
-
-  //
   if (!is_null($xpath_of_ajax_btn)) {
     $ajax_btn = $driver->findElement(WebDriverBy::xpath($xpath_of_ajax_btn));
     $ajax_btn->click();
   }
-  //
-
 
   $driver->wait()->until(WebDriverExpectedCondition::elementToBeClickable(WebDriverBy::tagName('td')));
   $scraped_data = [];
@@ -163,14 +159,11 @@ $future1 = $runtime1->run(function($url, $xpath_of_ajax_btn, $column_numbers_to_
 }, array($url, $xpath_of_ajax_btn, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times_in_5_threads[0]));
 
 
-
-
-
 if ($pages >= 2) {
   $future2 = $runtime2->run(function($url, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times){
     require_once 'vendor/autoload.php';
     $host = 'http://selenium-hub:4444/wd/hub';
-    $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome());
+    $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome(), 3600000, 3600000);
     $driver->get($url);
     $scraped_data = [];
 
@@ -258,14 +251,11 @@ if ($pages >= 2) {
 }
 
 
-
-
-
 if ($pages >= 3) {
   $future3 = $runtime3->run(function($url, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times){
     require_once 'vendor/autoload.php';
     $host = 'http://selenium-hub:4444/wd/hub';
-    $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome());
+    $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome(), 3600000, 3600000);
     $driver->get($url);
     $scraped_data = [];
 
@@ -352,14 +342,11 @@ if ($pages >= 3) {
 }
 
 
-
-
-
 if ($pages >= 4) {
   $future4 = $runtime4->run(function($url, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times){
     require_once 'vendor/autoload.php';
     $host = 'http://selenium-hub:4444/wd/hub';
-    $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome());
+    $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome(), 3600000, 3600000);
     $driver->get($url);
     $scraped_data = [];
 
@@ -447,15 +434,11 @@ if ($pages >= 4) {
 }
 
 
-
-
-
-
 if ($pages >= 5) {
   $future5 = $runtime5->run(function($url, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times){
     require_once 'vendor/autoload.php';
     $host = 'http://selenium-hub:4444/wd/hub';
-    $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome());
+    $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome(), 3600000, 3600000);
     $driver->get($url);
     $scraped_data = [];
 
@@ -562,7 +545,6 @@ if ($pages >= 4) {
 if ($pages >= 5) {
   $data = array_merge($data, $future5->value());
 }
-
 
 for ($i = 0; $i < count($data); $i++) {
   if ($i == 0) {
